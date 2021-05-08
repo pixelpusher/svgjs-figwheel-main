@@ -13,3 +13,5 @@ pom.xml.asc
 .nrepl-port
 .cpcache/
 .rebel_readline_history
+.calva/output-window/output.calva-repl
+.lsp/sqlite.db
