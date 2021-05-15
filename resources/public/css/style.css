@@ -1,12 +1,3 @@
-body {
-    margin: 0;
-    overflow: hidden;
-}
-
-div {
-    height: 100vh;
-}
-
 @font-face {
     font-family: "Microgramma";
     src: url("../fonts/mg.ttf")
@@ -17,4 +8,25 @@ div {
     font-family: "Microgramma Bold";
     src: url("../fonts/mg_b.otf")
          format("opentype");
+}
+
+
+@font-face {
+    font-family: "Ostrich Sans Bold";
+    src: url("../fonts/ostrich-sans-bold.ttf")
+         format("opentype");
+}
+
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: "Ostrich Sans Bold";
+}
+svg {
+    font-size: 16px;
+}
+
+div {
+    height: 100vh;
 }

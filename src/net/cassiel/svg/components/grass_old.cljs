@@ -4,8 +4,7 @@
   )
 
 (defn single-grass [content container x h num-segs]
-  (let [
-        text1 (.text container #(do
+  (let [text1 (.text container #(do
                                   (-> (.tspan % "We go")
                                       (.dy 50))
                                   (-> (.tspan % "up")

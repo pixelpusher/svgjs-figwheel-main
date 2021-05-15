@@ -172,3 +172,10 @@
 (nth #js [1 2 3] 0)
 
 (gstring/format "%d" 44)
+
+(map #(js/perlinNoise (/ % 10))
+     (range 10))
+
+(for [x (range 10)
+      y (range 10)]
+  (js/perlinNoise x y))
