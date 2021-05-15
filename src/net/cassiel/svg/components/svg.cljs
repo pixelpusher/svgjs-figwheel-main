@@ -2,9 +2,14 @@
   (:require-macros [cljs.core.async.macros :refer [go go-loop alt!]])
   (:require [com.stuartsierra.component :as component]
             [net.cassiel.lifecycle :refer [starting stopping]]
-            #_ [net.cassiel.svg.form :as form]
-            [net.cassiel.svg.grass :as form]
+            [net.cassiel.svg.protocols :as px]
+            [net.cassiel.svg.form :as form]
+            [net.cassiel.svg.grass :as grass]
+            [net.cassiel.svg.grid :as grid]
             [cljs.core.async :as a :refer [>! <!]]))
+
+;;(def FORM #(form/DemoForm.))
+(def FORM #(grid/GridForm.))
 
 (defn empty-svg! []
   (.empty (js/$ "svg.svgmain")))
@@ -27,11 +32,11 @@
   "Render the form. `form-state` is a convenience atom for state (initially nil).
    If resizing occurs, `render` will be called again with the preserved state,
    so should clear it down if necessary."
-  [svg form-state]
+  [svg form form-state]
   (let [{:keys [x y size]} (calculate-square-parameters)
         svg' (-> (.nested svg) (.move x y))
         g (.group svg')]
-    (form/render g size form-state)))
+    (px/render form g size form-state)))
 
 (defn first-child [elem]
   (first (.children elem)))
@@ -46,10 +51,10 @@
 
 (defn tick
   "Clock tick on the second (or very shortly thereafter)."
-  [svg ts form-state]
-  (form/tick (get-main-group svg) ts form-state))
+  [svg ts form form-state]
+  (px/tick form (get-main-group svg) ts form-state))
 
-(defrecord SVG [clock svg form-state installed?]
+(defrecord SVG [clock svg form form-state installed?]
   Object
   (toString [this] (str "SVG " (seq this)))
 
@@ -58,18 +63,20 @@
     (starting this
               :on installed?
               :action #(let [svg (js/SVG)
+                             form (FORM)
                              form-state (atom nil)]
                          (-> svg
                              (.addTo "#main")
                              (.addClass "svgmain")
                              (.size "100%" "100%"))
-                         (render svg form-state)
+                         (render svg form form-state)
                          (go-loop []
                            (when-let [v (<! (:tick-chan clock))]
-                             (tick svg v form-state)
+                             (tick svg v form form-state)
                              (recur)))
                          (assoc this
                                 :svg svg
+                                :form form
                                 :form-state form-state
                                 :installed? true))))
 
@@ -80,5 +87,6 @@
                          (.remove (js/$ "svg"))
                          (assoc this
                                 :svg nil
+                                :form nil
                                 :form-state nil
                                 :installed? false)))))

@@ -1,8 +1,9 @@
 const PERLIN_SIZE = 4095;
 
-const perlin = new Array(PERLIN_SIZE+1).fill(0).map(()=>Math.random());
+const perlin = new Array(PERLIN_SIZE + 1).fill(0).map(() => Math.random());
 
-function perlinNoise(x, y = 0, z = 0, perlin_octaves = 4, perlin_amp_falloff = 0.5) {
+function perlinNoise(x, y = 0, z = 0,
+                     perlin_octaves = 4, perlin_amp_falloff = 0.5) {
 
     const PERLIN_YWRAPB = 4;
     const PERLIN_YWRAP = 1 << PERLIN_YWRAPB;
@@ -10,7 +11,6 @@ function perlinNoise(x, y = 0, z = 0, perlin_octaves = 4, perlin_amp_falloff = 0
     const PERLIN_ZWRAP = 1 << PERLIN_ZWRAPB;
 
     const scaled_cosine = i => 0.5 * (1.0 - Math.cos(i * Math.PI));
-
 
     if (x < 0) {
         x = -x;
